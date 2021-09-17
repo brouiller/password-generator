@@ -18,13 +18,13 @@ var generatePassword = function () {
 //array with question keywords
   var keyWords = ["lowercase", "UPPERCASE", "numeric", "special"];
 
-//create array of character set arrays to use in the function to build the user selected array
-  var varNames = [lower, upper, num, spec];
+//array of character set arrays to use in the function to build the user selected array
+  var inceptionArray = [lower, upper, num, spec];
 
 //ask user for password length
   var pwLength = window.prompt("Choose your password length. (min 8, max 128, no decimals)");
 
-//check pwLength, if it's invalid, let the user know and rerun from the beginning
+//check pwLength, if it's invalid, let the user know and return to the beginning
   if (pwLength === null) {
     return "You cancelled the prompt. Press Generate Password to retry.";
   } else if (128 < pwLength || pwLength < 8 || pwLength % 1 != 0) {
@@ -32,25 +32,12 @@ var generatePassword = function () {
     generatePassword();
   };
 
-//a function to combine the arrays
-  var combineArray = function (w) {
-    charArray.push.apply(charArray, w);
-    console.log(charArray);
-  };
-
-//a function to ask questions and assign answers to a variable
-  var askQuestion = function (v) {
-    u = window.confirm("Would you like to include " + v + " characters?");
-    return u;
-  };
-
-//for loop to ask which types to include
+//for loop to ask which types to include and record selection
   for (var i = 0; i < keyWords.length; i++) {
-    var combine = askQuestion(keyWords[i]);
-    if(combine){
-      combineArray(varNames[i]);
+    var ask = window.confirm("Would you like to include " + keyWords[i] + " characters?");
+    if(ask){
+      charArray.push.apply(charArray, inceptionArray[i]);
       userSelection[i] = true;
-      console.log(userSelection);
     };
   };
 
