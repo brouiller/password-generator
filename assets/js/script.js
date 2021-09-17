@@ -1,81 +1,91 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
-//Prompt for password length
-//Check to see if it's between 8 and 128
-//Confirm lowercase, uppercase, numeric, special characters
-//Create array with appropriate characters
-//Generate password of appropriate length
-//Test password to see if it has at least one of each included character type
-//If not, regenerate and test again
-var lower = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",];
-var upper = lower.map(value => value.toUpperCase());
-var num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-var spec = ["!", "@", "#", "$", "%", "^", "&", "*"];
 
+
+//primary function
 var generatePassword = function () {
-  var pwLength = window.prompt("Choose your password length (min 8, max 128).");
-  //check pwLength, if it's invalid, let the user know and rerun from the beginning
-  if (128 < pwLength || pwLength < 8) {
-    window.alert("Please enter a valid number.");
+//arrays with different sets of characters
+  var lower = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+  var upper = lower.map((value) => value.toUpperCase());
+  var num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+  var spec = ["!", "@", "#", "$", "%", "^", "&", "*"];
+  var charArray = [];
+
+//declare an array with question keywords and one with corresponding variable names
+  var keyWords = ["lowercase", "UPPERCASE", "numeric", "special"];
+  var varNames = [lower, upper, num, spec];
+  var boolNames = ["charLower", "charUpper", "charNum", "charSpec"];
+  var charLower = true;
+  var charUpper = true;
+  var charNum = true;
+  var charSpec = true;
+
+//ask user for password length
+  var pwLength = window.prompt("Choose your password length. (min 8, max 128, no decimals)");
+
+//check pwLength, if it's invalid, let the user know and rerun from the beginning
+  if (pwLength === null) {
+    return "You cancelled the prompt. Press Generate Password to retry.";
+  } else if (128 < pwLength || pwLength < 8 || pwLength % 1 != 0) {
+    window.alert("Can't you read?\nPlease enter a valid number.");
     generatePassword();
   };
-  var charArray = [];
+
+//a function to combine the arrays
   var combineArray = function (w) {
     charArray.push.apply(charArray, w);
     console.log(charArray);
   };
 
-  var charLower = window.confirm(
-    "Would you like to include lowercase letters?"
-  );
-  if (charLower) {
-    combineArray(lower);
+//a function to ask questions and assign answers to a variable
+  var askQuestion = function (u, v) {
+    u = window.confirm("Would you like to include " + v + " characters?");
+    return u;
   };
-  var charUpper = window.confirm(
-      "Would you like to include UPPERCASE letters?"
-    );
-  if (charUpper) {
-    combineArray(upper);
+
+//for loop to ask which types to include
+  for (var i = 0; i < keyWords.length; i++) {
+    var combine = askQuestion(boolNames[i], keyWords[i]);
+    if(combine){
+      combineArray(varNames[i]);
+    };
   };
-  var charNum = window.confirm(
-      "Would you like to include numbers?"
-    );
-  if (charNum) {
-    combineArray(num);
-  };
-  var charSpec = window.confirm(
-      "Would you like to include special characters?"
-    );
-  if (charSpec) {
-    combineArray(spec);
-  };
+
+//checks to make sure they selected at least one type, otherwise starts it over
   if (charArray.length === 0) {
-    window.alert("You have to choose at least one type.\nLet's try this again.");
+    window.alert(
+      "You can't generate a password from nothing. You have to choose at least one type.\nLet's try this again."
+    );
     generatePassword();
-  };
+  }
+  //assembles the password by picking random elements from the character array until password length is achieved
+  var pw = "";
   var makePassword = function (z) {
-    var pw = "";
     for (var i = 0; i < z; i++) {
       var index = Math.floor(Math.random() * charArray.length);
       pw += charArray[index];
-    };
+    }
     console.log(pw);
   };
+
+  //generates a password from the character array of the user specified length
   makePassword(pwLength);
 
-  var checkPassword = function (x,y) {
+  // checks to make sure there's at least one character of each selected type in the password, otherwise makes new password
+  var checkPassword = function (x, y) {
     if (charLower) {
-
+      console.log("lower is true");
     } else if (charUpper) {
-
+      console.log("upper is true");
     } else if (charNum) {
-
+      console.log("num is true");
     } else if (charSpec) {
-
+      console.log("spec is true");
     }
-  }
-return;
+  };
+  checkPassword(pw, lower);
+  return;
 };
 
 // Write password to the #password input
