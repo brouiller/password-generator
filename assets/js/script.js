@@ -1,8 +1,6 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
-
-
 //primary function
 var generatePassword = function () {
 //arrays with different sets of characters
@@ -10,16 +8,18 @@ var generatePassword = function () {
   var upper = lower.map((value) => value.toUpperCase());
   var num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
   var spec = ["!", "@", "#", "$", "%", "^", "&", "*"];
+
+//array to hold user selected characters
   var charArray = [];
 
-//declare an array with question keywords and one with corresponding variable names
+//array to record which sets of characters the user selected
+  var userSelection = [false, false, false, false];
+
+//array with question keywords
   var keyWords = ["lowercase", "UPPERCASE", "numeric", "special"];
+
+//create array of character set arrays to use in the function to build the user selected array
   var varNames = [lower, upper, num, spec];
-  var boolNames = ["charLower", "charUpper", "charNum", "charSpec"];
-  var charLower = true;
-  var charUpper = true;
-  var charNum = true;
-  var charSpec = true;
 
 //ask user for password length
   var pwLength = window.prompt("Choose your password length. (min 8, max 128, no decimals)");
@@ -39,27 +39,30 @@ var generatePassword = function () {
   };
 
 //a function to ask questions and assign answers to a variable
-  var askQuestion = function (u, v) {
+  var askQuestion = function (v) {
     u = window.confirm("Would you like to include " + v + " characters?");
     return u;
   };
 
 //for loop to ask which types to include
   for (var i = 0; i < keyWords.length; i++) {
-    var combine = askQuestion(boolNames[i], keyWords[i]);
+    var combine = askQuestion(keyWords[i]);
     if(combine){
       combineArray(varNames[i]);
+      userSelection[i] = true;
+      console.log(userSelection);
     };
   };
 
-//checks to make sure they selected at least one type, otherwise starts it over
+//checks to make sure user selected at least one type, otherwise starts it over
   if (charArray.length === 0) {
     window.alert(
       "You can't generate a password from nothing. You have to choose at least one type.\nLet's try this again."
     );
     generatePassword();
-  }
-  //assembles the password by picking random elements from the character array until password length is achieved
+  };
+
+//assembles the password by picking random elements from the character array until password length is achieved
   var pw = "";
   var makePassword = function (z) {
     for (var i = 0; i < z; i++) {
