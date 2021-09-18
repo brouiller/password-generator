@@ -13,7 +13,7 @@ var generatePassword = function () {
   var charArray = [];
 
 //array to record which sets of characters the user selected
-  var userSelection = [false, false, false, false];
+  var userSelection = [false, false, false, false, 0];
 
 //array with question keywords
   var keyWords = ["lowercase", "UPPERCASE", "numeric", "special"];
@@ -22,59 +22,71 @@ var generatePassword = function () {
   var inceptionArray = [lower, upper, num, spec];
 
 //ask user for password length
-  var pwLength = window.prompt("Choose your password length. (min 8, max 128, no decimals)");
-
-//check pwLength, if it's invalid, let the user know and return to the beginning
-  if (pwLength === null) {
-    return "You cancelled the prompt. Press Generate Password to retry.";
-  } else if (128 < pwLength || pwLength < 8 || pwLength % 1 != 0) {
-    window.alert("Can't you read?\nPlease enter a valid number.");
-    generatePassword();
-  };
-
-//for loop to ask which types to include and record selection
-  for (var i = 0; i < keyWords.length; i++) {
-    var ask = window.confirm("Would you like to include " + keyWords[i] + " characters?");
-    if(ask){
-      charArray.push.apply(charArray, inceptionArray[i]);
-      userSelection[i] = true;
-    };
-  };
-
-//checks to make sure user selected at least one type, otherwise starts it over
-  if (charArray.length === 0) {
-    window.alert(
-      "You can't generate a password from nothing. You have to choose at least one type.\nLet's try this again."
+  var askLength = function () {
+    var pwLength = window.prompt(
+      "Choose your password length. (min 8, max 128, no decimals)"
     );
-    generatePassword();
-  };
-
+//check pwLength, if it's invalid, let the user know and return to the beginning
+    if (pwLength === null) {
+//alert user if prompt is cancelled
+      return window.alert("You cancelled the prompt. Press Generate Password to retry.");
+    } else if (128 < pwLength || pwLength < 8 || pwLength % 1 != 0) {
+      window.alert("Can't you read?\nPlease enter a valid number.");
+      askLength();
+    } else {
+      keyWords[4] = pwLength;
+      //for loop to ask which types to include and record selection
+      for (var i = 0; i < keyWords.length - 1; i++) {
+        var ask = window.confirm(
+          "Would you like to include " + keyWords[i] + " characters?"
+        );
+        if (ask) {
+          charArray.push.apply(charArray, inceptionArray[i]);
+          userSelection[i] = true;
+        }
+      }
+      //checks to make sure user selected at least one character type, otherwise starts it over
+      if (charArray.length === 0) {
+        window.alert(
+          "I can't generate a password from nothing. You have to choose at least one type.\nLet's try this again."
+        );
+        askLength();
+      };
 //assembles the password by picking random elements from the character array until password length is achieved
-  var pw = "";
-  var makePassword = function (z) {
-    for (var i = 0; i < z; i++) {
-      var index = Math.floor(Math.random() * charArray.length);
-      pw += charArray[index];
-    }
-    console.log(pw);
-  };
+      var pw = "";
+      var makePassword = function (z) {
+        for (var i = 0; i < z; i++) {
+          var index = Math.floor(Math.random() * charArray.length);
+          pw += charArray[index];
+        };
+        return pw;
+      };
+      var testPW = makePassword(keyWords[4]);
+      console.log(testPW);
+    };//end of else
+  };//end of function
+  askLength();
 
-  //generates a password from the character array of the user specified length
-  makePassword(pwLength);
+
+
+
+
+  // //generates a password from the character array of the user specified length
+  // makePassword(keyWords[4]);
 
   // checks to make sure there's at least one character of each selected type in the password, otherwise makes new password
-  var checkPassword = function (x, y) {
-    if (charLower) {
-      console.log("lower is true");
-    } else if (charUpper) {
-      console.log("upper is true");
-    } else if (charNum) {
-      console.log("num is true");
-    } else if (charSpec) {
-      console.log("spec is true");
-    }
-  };
-  checkPassword(pw, lower);
+  // var checkPassword = function (x, y) {
+  //   if (charLower) {
+  //     console.log("lower is true");
+  //   } else if (charUpper) {
+  //     console.log("upper is true");
+  //   } else if (charNum) {
+  //     console.log("num is true");
+  //   } else if (charSpec) {
+  //     console.log("spec is true");
+  //   }
+  // };
+  // checkPassword(pw, lower);
   return;
 };
 
