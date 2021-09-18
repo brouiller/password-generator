@@ -22,7 +22,7 @@ var generatePassword = function () {
   var inceptionArray = [lower, upper, num, spec];
 
 //ask user for password length
-  var askLength = function () {
+
     var pwLength = window.prompt(
       "Choose your password length. (min 8, max 128, no decimals)"
     );
@@ -32,7 +32,7 @@ var generatePassword = function () {
       return window.alert("You cancelled the prompt. Press Generate Password to retry.");
     } else if (128 < pwLength || pwLength < 8 || pwLength % 1 != 0) {
       window.alert("Can't you read?\nPlease enter a valid number.");
-      askLength();
+      generatePassword();
     } else {
 //if user input from the prompt passes validation, save value to keyWords array
       keyWords[4] = pwLength;
@@ -51,7 +51,7 @@ var generatePassword = function () {
         window.alert(
           "I can't generate a password from nothing. You have to choose at least one type.\nLet's try this again."
         );
-        askLength();
+        generatePassword();
       };
 //assembles the password by picking random elements from the character array until password length is achieved
       var pw = "";
@@ -60,10 +60,8 @@ var generatePassword = function () {
           var index = Math.floor(Math.random() * charArray.length);
           pw += charArray[index];
         };
-        console.log(pw);
 //split password string into array for comparison
         var pwToTestArray = pw.split("");
-        console.log(pwToTestArray);
 //function to check if any characters in password are found in each selected character type array
         var validatePassword = function (x, y) {
           return y.some(function (v) {
@@ -72,23 +70,22 @@ var generatePassword = function () {
         };
 //loop through user selected arrays
         for (var i = 0; userSelection.length - 1; i++) {
+          var y = true;
           if (userSelection[i]) {
-            var y = validatePassword(inceptionArray[i], pwToTestArray);
+            y = validatePassword(inceptionArray[i], pwToTestArray);
           } else if (!y) {
             pw = '';
             return makePassword(keyWords[4]);
           } else {
-            console.log(pw);
             return pw;
           };
         };
-
       };
       makePassword(keyWords[4]);
     };//end of else
-  };//end of function
-  askLength();
-  return;
+
+
+  return pw;
 };
 
 // Write password to the #password input
