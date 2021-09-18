@@ -5,7 +5,7 @@ This website contains a secure password generator that allows you to pick the pa
 ## Mock-up
 The animation below shows the password being generated.
 
-<img src='./assets/passwordgenerator.gif' alt='password generator animated gif' width='500' height='500' />
+<img src='./assets/passwordgenerator.gif' alt='password generator animated gif' />
 
 
 ## Deployed Application
